@@ -111,6 +111,7 @@ INSERT INTO activity (name, gear_type_required, parent_id) VALUES
 ('Litter setup', ARRAY['rope','carabiner','patient_transport','pulley_set','sling']::gear_type[], 2);
 
 CREATE TABLE gear_log (
+  id SERIAL PRIMARY KEY,
   created_at timestamp with time zone not null default now(),
   gear_id INTEGER not null,
   is_used BOOLEAN DEFAULT FALSE,

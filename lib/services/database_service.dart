@@ -113,7 +113,10 @@ class DatabaseService extends ChangeNotifier {
     }
   }
 
-  Future<Null> saveGearLog(Map<int, List<String>> gearLogMap) async {
+  Future<Null> saveGearLog(
+    Map<int, List<String>> gearLogMap,
+    Map<int, String> gearNoteMap,
+  ) async {
     const keyMappings = {
       'Used': 'is_used',
       'Damaged': 'is_damaged',
@@ -130,6 +133,9 @@ class DatabaseService extends ChangeNotifier {
       for (String key in entry.value) {
         if (keyMappings.containsKey(key)) {
           newMap[keyMappings[key]!] = true;
+          if (keyMappings[key]! == 'has_note') {
+            newMap['note'] = gearNoteMap[entry.key] ?? '';
+          }
         }
       }
       return newMap;

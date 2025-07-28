@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:vra_asset_manager/models/gear.dart';
 import 'package:vra_asset_manager/widgets/click_icon.dart';
+import 'package:vra_asset_manager/widgets/note_dialog.dart';
 
 class GearTab extends StatelessWidget {
   final Future<List<Gear>> gears;
   final Map<int, List<String>> selection;
+  final Map<int, String> noteMap;
 
-  const GearTab({super.key, required this.gears, required this.selection});
+  const GearTab({
+    super.key,
+    required this.gears,
+    required this.selection,
+    required this.noteMap,
+  });
 
   bool _isSelected(id, key) {
     return selection.containsKey(id) && selection[id]!.contains(key);
@@ -28,44 +35,16 @@ class GearTab extends StatelessWidget {
     }
   }
 
-  void _showInputDialog(BuildContext context) {
-    final TextEditingController controller = TextEditingController();
-    final FocusNode focusNode = FocusNode();
-
-    showDialog(
+  Future<void> _showInputDialog(BuildContext context, int id) async {
+    final result = await showDialog<String>(
       context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Add Note'),
-          content: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              hintText: 'Enter your note',
-              border: OutlineInputBorder(),
-            ),
-            maxLines: 6,
-            maxLength: 300,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                String userInput = controller.text;
-                print('User entered: $userInput');
-                Navigator.of(dialogContext).pop(); // Close the dialog
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => AddNoteDialog(),
     );
+
+    // Update state with the result if not null
+    if (result != null) {
+      noteMap[id] = result;
+    }
   }
 
   @override
@@ -189,7 +168,7 @@ class GearTab extends StatelessWidget {
                               onChanged: (value) {
                                 _toggleSelection(gear.id, 'Add Note');
                                 if (value == true) {
-                                  _showInputDialog(context);
+                                  _showInputDialog(context, gear.id);
                                 }
                               },
                             ),

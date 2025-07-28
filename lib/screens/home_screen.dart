@@ -14,20 +14,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool hasLocalData = false;
-  // bool _isOnline = true;
   final Map<int, List<String>> selectionMap = {};
-
-  // Future<void> _checkConnectivity() async {
-  //   final result = await ConnectivityService().isOnline();
-  //   setState(() {
-  //     _isOnline = result;
-  //   });
-  // }
+  final Map<int, String> noteMap = {};
 
   @override
   void initState() {
     super.initState();
-    // _checkConnectivity();
   }
 
   @override
@@ -75,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Provider.of<DatabaseService>(
                       context,
                       listen: false,
-                    ).saveGearLog(selectionMap);
+                    ).saveGearLog(selectionMap, noteMap);
 
                     selectionMap.clear();
                     setState(() {});
@@ -110,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           listen: false,
                         ).fetchByParent(id: item.id),
                         selection: selectionMap,
+                        noteMap: noteMap,
                       );
                     }).toList(),
                   ),
