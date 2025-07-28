@@ -9,6 +9,8 @@ class Gear {
   DateTime? expiryDate;
   bool? trackUsage;
   bool? trackExpiry;
+  bool? missing;
+  bool? damaged;
   int? parentId;
   DateTime? createdAt;
   int sortOrder;
@@ -22,6 +24,8 @@ class Gear {
     this.expiryDate,
     this.trackUsage,
     this.trackExpiry,
+    this.missing,
+    this.damaged,
     this.parentId,
     this.createdAt,
     required this.sortOrder,
@@ -37,6 +41,8 @@ class Gear {
       expiryDate: DateTime.tryParse(data['expiry_date'] as String? ?? ''),
       trackUsage: data['track_usage'] as bool? ?? false,
       trackExpiry: data['track_expiry'] as bool? ?? false,
+      missing: data['missing'] as bool? ?? false,
+      damaged: data['damaged'] as bool? ?? false,
       parentId: data['parent_id'] as int,
       createdAt: DateTime.tryParse(data['created_at'] as String? ?? ''),
       sortOrder: data['sort_order'] as int? ?? 9999,

@@ -9,6 +9,8 @@ CREATE TABLE gear(
     expiry_date TIMESTAMPTZ GENERATED ALWAYS AS (mfg_date + shelf_life) STORED,
     track_usage BOOLEAN NOT NULL DEFAULT FALSE,
     track_expiry BOOLEAN NOT NULL DEFAULT FALSE,
+    missing BOOLEAN NOT NULL DEFAULT FALSE,
+    damaged BOOLEAN NOT NULL DEFAULT FALSE,
     parent_id INTEGER  NOT NULL DEFAULT -1,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     sort_order INTEGER,

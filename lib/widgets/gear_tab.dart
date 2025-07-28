@@ -107,92 +107,106 @@ class GearTab extends StatelessWidget {
                     children: [
                       Text(gear.name, style: TextStyle(fontSize: 16)),
 
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 4),
 
-                      (gear.createdAt != null &&
+                      gear.createdAt != null &&
                               DateTime.now()
                                       .difference(gear.createdAt!)
                                       .inDays
                                       .abs() <
-                                  7)
+                                  7
                           ? Badge(
                               label: Text("New"),
                               backgroundColor: Colors.blue,
                             )
-                          : const SizedBox(width: 8),
+                          : const SizedBox.shrink(),
 
                       // not accurate; expiring and expired to be handled
-                      (gear.expiryDate != null &&
+                      gear.expiryDate != null &&
                               gear.expiryDate!
                                       .difference(DateTime.now())
                                       .inDays <
-                                  0)
+                                  0
                           ? Badge(
                               label: Text("Expiring"),
                               backgroundColor: Colors.red,
                             )
-                          : const SizedBox(width: 8),
+                          : const SizedBox.shrink(),
+                      gear.missing!
+                          ? Badge(
+                              label: Text("Missing"),
+                              backgroundColor: Colors.orange,
+                            )
+                          : const SizedBox.shrink(),
+                      gear.damaged!
+                          ? Badge(
+                              label: Text("Damaged"),
+                              backgroundColor: Colors.red,
+                            )
+                          : const SizedBox.shrink(),
                     ],
                   ),
+                  gear.damaged! ? Text('Do not used!') : SizedBox.shrink(),
+                  gear.missing! == false && gear.damaged! == false
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ClickIcon(
+                              id: gear.id,
+                              title: 'Used',
+                              iconData: Icons.check_box,
+                              selected: _isSelected(gear.id, 'Used'),
+                              onChanged: (value) {
+                                _toggleSelection(gear.id, 'Used');
+                              },
+                            ),
+                            ClickIcon(
+                              id: gear.id,
+                              title: 'Damaged',
+                              iconData: Icons.broken_image,
+                              selectedColor: Colors.red,
+                              selected: _isSelected(gear.id, 'Damaged'),
+                              onChanged: (value) {
+                                _toggleSelection(gear.id, 'Damaged');
+                              },
+                            ),
+                            ClickIcon(
+                              id: gear.id,
+                              title: 'Missing',
+                              iconData: Icons.question_mark,
+                              selectedColor: Colors.orange,
+                              selected: _isSelected(gear.id, 'Missing'),
+                              onChanged: (value) {
+                                _toggleSelection(gear.id, 'Missing');
+                              },
+                            ),
+                            ClickIcon(
+                              id: gear.id,
+                              title: 'Add Note',
+                              iconData: Icons.note_add,
+                              selectedColor: Colors.green,
+                              selected: _isSelected(gear.id, 'Add Note'),
+                              onChanged: (value) {
+                                _toggleSelection(gear.id, 'Add Note');
+                                if (value == true) {
+                                  _showInputDialog(context);
+                                }
+                              },
+                            ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ClickIcon(
-                        id: gear.id,
-                        title: 'Used',
-                        iconData: Icons.check_box,
-                        selected: _isSelected(gear.id, 'Used'),
-                        onChanged: (value) {
-                          _toggleSelection(gear.id, 'Used');
-                        },
-                      ),
-                      ClickIcon(
-                        id: gear.id,
-                        title: 'Damaged',
-                        iconData: Icons.broken_image,
-                        selectedColor: Colors.red,
-                        selected: _isSelected(gear.id, 'Damaged'),
-                        onChanged: (value) {
-                          _toggleSelection(gear.id, 'Damaged');
-                        },
-                      ),
-                      ClickIcon(
-                        id: gear.id,
-                        title: 'Missing',
-                        iconData: Icons.question_mark,
-                        selectedColor: Colors.orange,
-                        selected: _isSelected(gear.id, 'Missing'),
-                        onChanged: (value) {
-                          _toggleSelection(gear.id, 'Missing');
-                        },
-                      ),
-                      ClickIcon(
-                        id: gear.id,
-                        title: 'Add Note',
-                        iconData: Icons.note_add,
-                        selectedColor: Colors.green,
-                        selected: _isSelected(gear.id, 'Add Note'),
-                        onChanged: (value) {
-                          _toggleSelection(gear.id, 'Add Note');
-                          if (value == true) {
-                            _showInputDialog(context);
-                          }
-                        },
-                      ),
-
-                      // ChoiceChip(
-                      //   label: Text('Used'),
-                      //   selected: false,
-                      //   // selected: _value == index,
-                      //   // onSelected: (bool selected) {
-                      //   //   setState(() {
-                      //   //     _value = selected ? index : null;
-                      //   //   });
-                      //   // },
-                      // ),
-                    ],
-                  ),
+                            // ChoiceChip(
+                            //   label: Text('Used'),
+                            //   selected: false,
+                            //   // selected: _value == index,
+                            //   // onSelected: (bool selected) {
+                            //   //   setState(() {
+                            //   //     _value = selected ? index : null;
+                            //   //   });
+                            //   // },
+                            // ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
               // subtitle: Text(gear.gearContainerId.toString()),
